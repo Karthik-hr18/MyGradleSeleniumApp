@@ -1,3 +1,4 @@
+
 pipeline {
     agent any  // Use any available agent
 
@@ -14,27 +15,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'gradle build'  // Run Gradle build
+                sh 'gradle build'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'gradle test'  // Run unit tests
+                sh 'gradle test'
             }
         }
 
-        
-        
-       
         stage('Run Application') {
             steps {
-                // Start the JAR application
-                sh 'gradle run'
+                echo 'Skipping Selenium execution in Jenkins'
             }
         }
-
-        
     }
 
     post {
