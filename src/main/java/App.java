@@ -1,31 +1,45 @@
+
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-
-public class App {
-
+import org.openqa.selenium.chrome.ChromeOptions;
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
     public String getGreeting() {
         return "Hello world.";
     }
+    public static void main(String[] args)
+    {
+        // Setup Chrome options for headless execution (Jenkins compatible)
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");                // Run without GUI
+        options.addArguments("--no-sandbox");              // Required in Jenkins/VM
+        options.addArguments("--disable-dev-shm-usage");   // Prevent crashes
+        options.addArguments("--remote-allow-origins=*");  // Fix for newer Chrome issues
 
-    public static void main(String[] args) {
+        // Initialize WebDriver
+        WebDriver driver = new ChromeDriver(options);
 
-        // Print message
-        System.out.println(new App().getGreeting());
+        try {
+            // Open website
+            driver.get("https://www.saucedemo.com/");
 
-        // Setup WebDriver (Linux path)
-        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+            // Perform login actions
+            driver.findElement(By.id("user-name")).sendKeys("standard_user");
+            driver.findElement(By.id("password")).sendKeys("secret_sauce");
+            driver.findElement(By.id("login-button")).click();
 
-        // Launch browser
-        WebDriver driver = new ChromeDriver();
 
-        // Open website
-        driver.get("https://www.saucedemo.com/");
-        driver.manage().window().maximize();
-
-        // Perform login
-        driver.findElement(By.id("user-name")).sendKeys("standard_user");
-        driver.findElement(By.id("password")).sendKeys("secret_sauce");
-        driver.findElement(By.id("login-button")).click();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Close browser
+            driver.quit();
+        }
     }
 }
